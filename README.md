@@ -14,6 +14,16 @@ nest new project-name
 然后就会创建出项目大概的结构了。其中默认是typescript。在安装的时候可以选择包管理器，我使用的是yarn  
 
 ### 熟悉项目结构  
+
+
+首先src目录下多了几个核心文件   
+app.controller.ts、  
+app.controller.spec.ts    
+app.modules.ts  
+app.service.ts  
+main.ts 
+
+
 | -- | -- |
 | :--: | :--: |
 | app.controller.ts| 带有单个路由的基本控制器 | 
@@ -24,11 +34,3 @@ nest new project-name
 
 
 
-
-
-首先src目录下多了几个核心文件 
-app.controller.ts、  
-app.controller.spec.ts    
-app.modules.ts  
-app.service.ts  
-main.ts
