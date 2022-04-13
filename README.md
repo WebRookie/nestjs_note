@@ -32,5 +32,13 @@ main.ts
 | app.service.ts | 具有单一方法的基本服务（service）method |
 | main.ts | 应用程序的入口文件，它使用核心函数NestFactory来创建Nest应用程序实例 |  
 
+然后运行程序
+`yarn run start` 此时会进入debugger模式。输入localhost:3000k可以看到hello world   
 
+### Controller 控制器  
+首先：什么事Controller？
+> Controllers are responsible for handling incoming requests and returning responses to the client    
+
+控制器就是负责处理从客户端进来的请求，以及返回对应的响应  
+ 这句话的理解就是。用户发送的请求，最初揭接触的就是Controller。
 
