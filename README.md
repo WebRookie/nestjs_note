@@ -40,5 +40,6 @@ main.ts
 > Controllers are responsible for handling incoming requests and returning responses to the client    
 
 控制器就是负责处理从客户端进来的请求，以及返回对应的响应  
- 这句话的理解就是。用户发送的请求，最初揭接触的就是Controller。
+ 这句话的理解就是。用户发送的请求，最初揭接触的就是Controller。  
+ 每个控制器有多个路由，不同的路由可以执行不同的动作  
 
