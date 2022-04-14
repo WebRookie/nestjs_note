@@ -1,10 +1,29 @@
-import { Controller, Post } from '@nestjs/common';
+import { Controller, Post, Body, UsePipes } from '@nestjs/common';
+import { loginSchema, registSchema } from 'src/common/validators/login.schema';
+import { LoginValidationPipe } from 'src/pipes/validation.pipe'
+import { CreateUserDto } from './login.dto';
 
-
-@Controller('login')
+@Controller('api')
 export class LoginController {
-  @Post()
-  login(): object {
-    
+  @Post('login')
+  @UsePipes(new LoginValidationPipe(loginSchema))
+  async login(@Body() req: object) {
+    try {
+      console.log('请求体Start')
+      console.log(req)
+      console.log('请求体End')
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  @Post('regist')
+  @UsePipes(new LoginValidationPipe(registSchema))
+  async regist(@Body() req: CreateUserDto ) {
+    try {
+      console.log(req)
+    } catch (error) {
+      
+    }
   }
 }
