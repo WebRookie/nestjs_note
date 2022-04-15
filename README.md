@@ -165,4 +165,58 @@ bootstrap();
 
 #### 授权  
  > 授权是 Guards 的一个很好的用例，因为只有当调用者（通常是特定的经过身份验证的用户）具有足够的权限时，特定的路由才应该可用。   
+
+ 
+### 日志 
+
+Nest 自己带有一个内置的基于文本的记录器，此功能是通过包`Logger`中的类提供的`@nestjs/common` 。 基础的设置就在main中将logger设置为true就可以开始了   
+
+当然，怎么能只满足这些呢？   
+
+#### 自定义日志   
+
+如果想要实现自己自定义的日志，只需要实现`LoggerService`接口的每个方法。 
+
+```
+import { LoggerService } from '@nestjs/common'  
+
+export class MyLogger implements LoggerService {
+    log(message: string) {
+    /* your implementation */
+  }
+  error(message: string, trace: string) {
+    /* your implementation */
+  }
+  warn(message: string) {
+    /* your implementation */
+  }
+  debug(message: string) {
+    /* your implementation */
+  }
+  verbose(message: string) {
+    /* your implementation */
+  }
+}
+```
+
+然后在main.ts通过实例化和这个类
+
+ ### Database   
+
+ Nestjs 官网上默认配置的是TypeOrm、和MongoDB。。 T^T TypeOrm用过了，感觉不太好用，MongoDB 不会用..... 所以转向了 Sequelize 和 Mysql  
+
+ **[Sequelize记录](src/models/models.md)**   
+
+ 现在可以返回到Providers  
+
+
+ ### Providers  提供者  处理业务逻辑的  
+
+ 
+
+ 
+
+ 
+
+
  

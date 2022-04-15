@@ -1,0 +1,77 @@
+{
+  "development": {
+    "dialect": "mysql",
+    "host": "localhost",
+    "port": 3306,
+    "database": "blog_dev",
+    "pool": {
+      "max": 5,
+      "min": 0,
+      "idle": 30000
+    },
+    "username": "root",
+    "password": "rootroot",
+    "timezone": "+08:00",
+    "logging": true,
+    "define": {
+      "timestamps": true,
+      "paranoid": true,
+      "createAt": "create_time",
+      "updateAt": "update_time",
+      "deleteAr": "delete_time",
+      "underscored": true,
+      "freezeTableName": true,
+      "charset": "utf8mb4"
+    }
+  },
+  "test": {
+    "dialect": "mysql",
+    "host": "localhost",
+    "port": 3306,
+    "database": "blog_test",
+    "pool": {
+      "max": 5,
+      "min": 0,
+      "idle": 30000
+    },
+    "username": "root",
+    "password": "rootroot",
+    "timezone": "+08:00",
+    "logging": true,
+    "define": {
+      "timestamps": true,
+      "paranoid": true,
+      "createAt": "create_time",
+      "updateAt": "update_time",
+      "deleteAr": "delete_time",
+      "underscored": true,
+      "freezeTableName": true,
+      "charset": "utf8mb4"
+    }
+  },
+  "production": {
+    "dialect": "mysql",
+    "host": "localhost",
+    "port": 3306,
+    "database": "blog",
+    "pool": {
+      "max": 5,
+      "min": 0,
+      "idle": 30000
+    },
+    "username": "root",
+    "password": "rootroot",
+    "timezone": "+08:00",
+    "logging": true,
+    "define": {
+      "timestamps": true,
+      "paranoid": true,
+      "createAt": "create_time",
+      "updateAt": "update_time",
+      "deleteAr": "delete_time",
+      "underscored": true,
+      "freezeTableName": true,
+      "charset": "utf8mb4"
+    }
+  }
+}

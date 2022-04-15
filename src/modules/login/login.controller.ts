@@ -1,3 +1,4 @@
+import { LoginService } from './login.service';
 import { Controller, Post, Body, UsePipes } from '@nestjs/common';
 import { loginSchema, registSchema } from 'src/common/validators/login.schema';
 import { LoginValidationPipe } from 'src/pipes/validation.pipe'
@@ -5,6 +6,7 @@ import { CreateUserDto } from './login.dto';
 
 @Controller('api')
 export class LoginController {
+  constructor(private readonly loginService: LoginService) {}
   @Post('login')
   @UsePipes(new LoginValidationPipe(loginSchema))
   async login(@Body() req: object) {
@@ -22,6 +24,7 @@ export class LoginController {
   async regist(@Body() req: CreateUserDto ) {
     try {
       console.log(req)
+      this.loginService.registUser(req)
     } catch (error) {
       
     }
