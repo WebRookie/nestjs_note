@@ -5,7 +5,7 @@
  * 
  */
 
-import { ArgumentsHost, Catch, ConsoleLogger, ExceptionFilter, HttpException } from "@nestjs/common";
+import { ArgumentsHost, Catch, ExceptionFilter, HttpException } from "@nestjs/common";
 import { Request, Response } from "express";
 const fs = require('fs');
 const dayjs = require("dayjs") ;
