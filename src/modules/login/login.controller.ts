@@ -6,14 +6,12 @@ import { CreateUserDto } from './login.dto';
 
 @Controller('api')
 export class LoginController {
-  constructor(private readonly loginService: LoginService) {}
+  constructor(private readonly loginService: LoginService) { }
   @Post('login')
   @UsePipes(new LoginValidationPipe(loginSchema))
   async login(@Body() req: object) {
     try {
-      console.log('请求体Start')
-      console.log(req)
-      console.log('请求体End')
+      return this.loginService.loginHandler(req)
     } catch (error) {
       console.log(error)
     }
@@ -21,12 +19,11 @@ export class LoginController {
 
   @Post('regist')
   @UsePipes(new LoginValidationPipe(registSchema))
-  async regist(@Body() req: CreateUserDto ) {
+  async regist(@Body() req: CreateUserDto) {
     try {
-      console.log(req)
-      this.loginService.registUser(req)
+      return this.loginService.registUser(req)
     } catch (error) {
-      
+      console.log(error)
     }
   }
 }

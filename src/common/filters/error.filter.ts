@@ -10,7 +10,7 @@ import { Request, Response } from "express";
 const fs = require('fs');
 const dayjs = require("dayjs") ;
 const path = require('path');
-
+import { CodeMap } from "src/config/app.config";
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -23,9 +23,11 @@ export class HttpExceptionFilter implements ExceptionFilter {
     response
     .status(status)
     .json({
-      statusCode: status,
-      timeStamp: new Date().toISOString(),
+      statusCode: CodeMap.ParamsError,
+      // timeStamp: new Date().toISOString(),
+      RequestTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
       path: request.url,
+      msg: 'Request Parameters Error',
       requestData: request.body
     })
 
