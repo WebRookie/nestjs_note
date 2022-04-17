@@ -16,6 +16,7 @@ model User {
   nickname    String   @db.VarChar(20)
   password    String
   email       String   @unique
+  role        String?   @default("user") @map("role")
   token       String?
   createdTime DateTime @default(now()) @map("created_time") @db.Timestamp(6)
   updatedTime DateTime @updatedAt @map("updated_time")
@@ -23,11 +24,11 @@ model User {
 }
 
 model Blog {
-  blogId  Int     @id @default(autoincrement()) @map("blog_id")
-  userId  Int     @map("user_id")
-  user    User    @relation(fields: [userId], references: [userId])
-  title   String  @db.VarChar(20)
-  content String  @db.VarChar(500)
+  blogId  Int       @id @default(autoincrement()) @map("blog_id")
+  userId  Int       @map("user_id")
+  user    User      @relation(fields: [userId], references: [userId])
+  title   String    @db.VarChar(20)
+  content String    @db.VarChar(500)
   author  String
   deleted DateTime?
 }

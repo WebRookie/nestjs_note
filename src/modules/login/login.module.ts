@@ -7,7 +7,8 @@ import { Module } from "@nestjs/common";
 
 @Module({
   providers:[LoginService],
-  controllers: [LoginController]
+  controllers: [LoginController],
+  exports: [LoginService]
 })
 
 
