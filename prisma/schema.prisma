@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,25 +7,24 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id          Int      @id @default(autoincrement())
-  userId      Int      @map("user_id")
+model blog {
+  blogId      Int       @id @default(autoincrement()) @map("blog_id")
+  userId      Int       @map("user_id")
+  title       String    @db.VarChar(50)
+  createdTime DateTime  @default(now()) @map("created_time") @db.Timestamp(6)
+  updatedTime DateTime  @default(now()) @updatedAt @map("updatae_time") @db.Timestamp(6)
+  deletedTime DateTime? @map("deleted_time")
+  content     String    @db.VarChar(500)
+  author      String
+}
+
+model user {
+  userId      Int      @id @unique @default(autoincrement()) @map("user_id")
   nickname    String   @db.VarChar(20)
   password    String
   email       String   @unique
-  role        String?   @default("user") @map("role")
+  role        String?  @default("user")
   token       String?
   createdTime DateTime @default(now()) @map("created_time") @db.Timestamp(6)
   updatedTime DateTime @updatedAt @map("updated_time")
-  blog        Blog[]
-}
-
-model Blog {
-  blogId  Int       @id @default(autoincrement()) @map("blog_id")
-  userId  Int       @map("user_id")
-  user    User      @relation(fields: [userId], references: [userId])
-  title   String    @db.VarChar(20)
-  content String    @db.VarChar(500)
-  author  String
-  deleted DateTime?
 }

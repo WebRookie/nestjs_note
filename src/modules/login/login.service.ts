@@ -1,3 +1,4 @@
+import { JwtService } from '@nestjs/jwt';
 import { Injectable } from "@nestjs/common";
 import { IToken } from "./login.interface";
 // import User from 'src/models/user.model'
@@ -6,26 +7,46 @@ import { md5Code } from "src/utils/utils";
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient()
 
+interface uniqueParams {
+  username?: string,
+  userId?: number
+}
 
 @Injectable()
 export class LoginService {
 
-  async findUser(username: string): Promise<any | undefined> {
+  constructor(private readonly jwtService: JwtService) { }
+
+  async findUser(uniqueP: uniqueParams): Promise<any | undefined> {
     try {
       // const user = await User.findAll({
       //   where: {
       //     username: username
       //   }
       // })
-      const user = prisma.user.findUnique({
+      console.log(uniqueP)
+      const user = prisma.user.findFirst({
         where: {
-          email: username
+          email: uniqueP.username,
+          OR: {
+            userId: uniqueP.userId
+          }
         }
       })
       return user
     } catch (error) {
       console.log(error)
       return error
+    }
+  }
+  async validate(username: string, password: string): Promise<any> {
+    const user = await this.findUser({ username: username })
+    console.log(user)
+    if (user?.password === password) {
+      const { password, ...userInfo } = user
+      return userInfo
+    } else {
+      return null
     }
   }
 
@@ -56,9 +77,8 @@ export class LoginService {
    */
   async registUser(params: any) {
     try {
-      const username = params.email;
-      const user = await this.findUser(username)
-      console.log(user)
+      const { username } = params.email;
+      const user = await this.findUser({ username })
       if (user) {
         return {
           code: CodeMap.UserExisted,
@@ -66,13 +86,17 @@ export class LoginService {
           data: null
         }
       }
-      // const createUser = await User.create(params)
-      const createUser = await prisma.user.create({ data: params })
-      console.log(createUser)
+      await prisma.user.create({ data: params })
+      // const createUser = await prisma.user.create({ data: params ,select: {
+      //   userId: true,
+      //   nickname: true,
+      //   email: true,
+      //   role: true,
+      // }})
       return {
         code: CodeMap.RequestSuccess,
         msg: 'Create Success',
-        data: createUser
+        data: null
       }
     } catch (error) {
       console.log(error)
@@ -93,6 +117,7 @@ export class LoginService {
           userId: true,
           email: true,
           nickname: true,
+          role: true,
           createdTime: false,
           updatedTime: false
         }
@@ -104,9 +129,9 @@ export class LoginService {
           data: null
         }
       }
-
-      const token = md5Code(params.username, params.password, params.timestamp)
-      this.setUserToken(token, user.userId)
+      const token = this.jwtService.sign(params.username, user.role)
+      // const token = md5Code(params.username, params.password, params.timestamp)
+      this.setUserToken(token, Number(user.userId))
       // 前端应该把返回的token放在后续的请求头里
       user.token = token;
       return {

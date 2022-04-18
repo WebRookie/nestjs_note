@@ -7,12 +7,13 @@ import { ObjectSchema } from "joi";
  */
 
 @Injectable()
-export class LoginValidationPipe implements PipeTransform {
+export class CommonValidationPipe implements PipeTransform {
   constructor( private schema: ObjectSchema) {}
 
 
   transform(value: any, metadata: ArgumentMetadata) {
     const { error }  = this.schema.validate(value)
+    console.log(error)
     if( error) {
       throw new BadRequestException('Parameter Error')
     }

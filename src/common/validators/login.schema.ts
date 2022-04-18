@@ -12,3 +12,4 @@ export const registSchema = Joi.object({
   password: Joi.string().min(4).required(),
   email: Joi.string().email({tlds: { allow: ['com', 'net']}}).required()
 })
+
