@@ -1,5 +1,5 @@
 import { JwtService } from '@nestjs/jwt';
-import { Injectable } from "@nestjs/common";
+import { HttpException, Injectable } from "@nestjs/common";
 import { IToken } from "./login.interface";
 // import User from 'src/models/user.model'
 import { CodeMap } from "src/config/app.config";
@@ -25,7 +25,6 @@ export class LoginService {
       //     username: username
       //   }
       // })
-      console.log(uniqueP)
       const user = prisma.user.findFirst({
         where: {
           OR: [
@@ -45,6 +44,12 @@ export class LoginService {
     }
   }
 
+  /**
+   * 
+   * @param username {email邮箱}
+   * @param password {用户密码}
+   * @returns 用户信息
+   */
   async validate(username: string, password: string): Promise<any> {
     const user = await this.findUser({ username: username })
     if (user?.password === password) {
@@ -64,7 +69,7 @@ export class LoginService {
    * 这里要添加token的定时任务，
    * @param token 加密好的token
    */
-  async setUserToken(token: string, userId: number) {
+  async updateUserToken(token: string, userId: number) {
     try {
       await prisma.user.update({
         where: {
@@ -86,8 +91,8 @@ export class LoginService {
    */
   async registUser(params: any) {
     try {
-      const { username } = params.email;
-      const user = await this.findUser({ username })
+      const username = params.email;
+      const user = await this.findUser({ username: username })
       if (user) {
         return {
           code: CodeMap.UserExisted,
@@ -109,9 +114,8 @@ export class LoginService {
       }
     } catch (error) {
       console.log(error)
-      return error
+      throw new HttpException({ data: error }, 500)
     }
-
 
   }
 
@@ -139,9 +143,9 @@ export class LoginService {
         }
       }
       // sign 内容体是payload，不能有敏感内容
-      const Access_Token = this.jwtService.sign({username:params.username, role:user.role},{secret:jwtConstant.secret})
+      const Access_Token = this.jwtService.sign({ username: params.username, role: user.role }, { secret: jwtConstant.secret })
       // const token = md5Code(params.username, params.password, params.timestamp)
-      this.setUserToken(Access_Token, Number(user.userId))
+      this.updateUserToken(Access_Token, Number(user.userId))
       // 前端应该把返回的token放在后续的请求头里
       user.token = Access_Token;
       return {

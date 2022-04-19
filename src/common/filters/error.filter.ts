@@ -19,15 +19,15 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
     const status = exception.getStatus();
-
+    console.log(exception.message)
     response
     .status(status)
     .json({
-      statusCode: CodeMap.ParamsError,
-      // timeStamp: new Date().toISOString(),
+      // statusCode: CodeMap.ParamsError,
+      statusCode: status,
       RequestTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
       path: request.url,
-      msg: 'Request Parameters Error',
+      msg:  exception.message || 'Request Error' ,
       requestData: request.body
     })
 

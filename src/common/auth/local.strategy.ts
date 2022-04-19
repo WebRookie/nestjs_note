@@ -12,7 +12,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     // super({
     //   usernameField: 'username',
     //   passwordField: 'password'
-    
+
     // } as IStrategyOptions)
     super({
       passReqToCallback: true
@@ -20,14 +20,15 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
   }
 
   // validate 是local Strategy的内置方法  现在是属于自定义validate方法
-  async validate(request: Request,username: string, password: string): Promise<any> {
-    // 查询数据库资料
-  //  const user = await this.loginService.validate(username, password)
-    const contextId = ContextIdFactory.getByRequest(request)
-    this.loginService = await this.moduleRef.resolve(LoginService,contextId)
-    const user = await this.loginService.validate(username, password)
-   console.log(user)
-   if(user) return user
-   else throw new UnauthorizedException('Access Deny')
+  async validate(request: Request, username: string, password: string): Promise<any> {
+    // // 查询数据库资料
+    // //  const user = await this.loginService.validate(username, password)
+    // const contextId = ContextIdFactory.getByRequest(request)
+    // this.loginService = await this.moduleRef.resolve(LoginService, contextId)
+    // const user = await this.loginService.validate(username, password)
+    // if (user) return user
+    // else throw new UnauthorizedException('Access Deny')
+    console.log(username)
+    console.log(password)
   }
 }

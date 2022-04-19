@@ -1,7 +1,7 @@
-import { Get, Controller, Request, Post, UsePipes, Body, UseGuards, Query } from '@nestjs/common';
+import { Get, Controller, Request, Post, UsePipes, Body, UseGuards, Query, HttpException } from '@nestjs/common';
 import { BlogService } from './blog.service';
 import { CommonValidationPipe } from 'src/pipes/validation.pipe';
-import { publishSchema, getAllBlogSchema } from 'src/common/validators/blog.schema';
+import { publishSchema, getAllBlogSchema, updateBlogInfo } from 'src/common/validators/blog.schema';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth-guard';
 import { SkipAuth } from 'src/common/auth/constants';
 
@@ -22,8 +22,8 @@ export class BlogController {
     }
   }
 
-  @Get('getBlogListPage')
   @SkipAuth()
+  @Get('getBlogListPage')
   @UsePipes(new CommonValidationPipe(getAllBlogSchema))
   async getAllBlogPage(@Query() req: Request) {
     try {
@@ -31,6 +31,18 @@ export class BlogController {
     } catch (error) {
       console.log(error)
       return error
+    }
+  }
+
+  @Post('updateBlog')
+  @UseGuards(JwtAuthGuard)
+  @UsePipes(new CommonValidationPipe(updateBlogInfo))
+  async updateBlogInfo(@Body() req: Request) {
+    try {
+      return this.blogService.updateBlogInfo(req)
+    } catch (error) {
+      console.log(error)
+      throw new HttpException({message:'Server Error'}, 500)
     }
   }
 }

@@ -13,7 +13,6 @@ export class CommonValidationPipe implements PipeTransform {
 
   transform(value: any, metadata: ArgumentMetadata) {
     const { error }  = this.schema.validate(value)
-    console.log(error)
     if( error) {
       throw new BadRequestException('Parameter Error')
     }

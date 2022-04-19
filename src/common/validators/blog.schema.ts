@@ -12,9 +12,15 @@ export const publishSchema = Joi.object({
 
 
 export const getAllBlogSchema = Joi.object({
-  param: Joi.object({
-    userId: Joi.string()
-  }),
   // pageSize: Joi.number().required(),
   pageNo: Joi.number().required(),
+  userId: Joi.number().empty(null)
+})
+
+export const updateBlogInfo = Joi.object({
+  blogId: Joi.number().required(),
+  userId: Joi.number().required(),
+  title: Joi.string().max(50).required(),
+  content: Joi.string().max(500).required(),
+  label: Joi.string()
 })

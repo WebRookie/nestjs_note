@@ -20,7 +20,8 @@ import { JwtAuthGuard } from 'src/common/guards/jwt-auth-guard';
       }
     })
   ],
-  providers:[BlogService, JwtStrategy, LoginService,{ provide: APP_GUARD, useClass: JwtAuthGuard}],
+  // providers:[BlogService, JwtStrategy, LoginService,{ provide: APP_GUARD, useClass: JwtAuthGuard}],  全局设置权限设置
+  providers:[BlogService, JwtStrategy, LoginService],
   controllers: [BlogController],
   exports: [BlogService]
 })
