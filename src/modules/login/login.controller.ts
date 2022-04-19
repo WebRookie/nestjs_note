@@ -1,3 +1,4 @@
+import { SkipAuth } from 'src/common/auth/constants';
 import { LoginService } from './login.service';
 import { Controller, Post, Body, UsePipes, UseGuards } from '@nestjs/common';
 import { loginSchema, registSchema } from 'src/common/validators/login.schema';

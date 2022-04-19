@@ -5,12 +5,13 @@ import { LoginController } from './login.controller';
 import { Module } from "@nestjs/common";
 import { JwtStrategy } from 'src/common/auth/jwt.stragegy';
 import { LocalStrategy } from 'src/common/auth/local.strategy';
+import { jwtConstant } from 'src/common/auth/constants';
 
 
 
 
 @Module({
-  imports: [PassportModule, JwtModule.register({ secret: 'TestNestJwt', signOptions: { expiresIn: '60' } })],
+  imports: [PassportModule, JwtModule.register({ secret: jwtConstant.secret, signOptions: { expiresIn: '1d' } })],
   providers: [LoginService, JwtStrategy, LocalStrategy],
   controllers: [LoginController],
   exports: [LoginService, JwtModule]

@@ -166,6 +166,34 @@ bootstrap();
 #### 授权  
  > 授权是 Guards 的一个很好的用例，因为只有当调用者（通常是特定的经过身份验证的用户）具有足够的权限时，特定的路由才应该可用。   
 
+在登录逻辑中.增加一个本地策略守卫
+```
+(filename local.strategy.ts )
+@Injectable()
+export class LocalStrategy extends PassportStrategy(Strategy) {
+  constructor(private readonly loginService: LoginService) {
+    super({
+      usernameField: 'username',
+      passwordField: 'password'
+    } as IStrategyOptions)
+    // super()
+  }
+
+  // validate 是local Strategy的内置方法  
+  async validate(username: string, password: string): Promise<any> {
+    // 查询数据库资料
+   const user = await this.loginService.validate(username, password)
+   if(user) return user
+   else throw new UnauthorizedException('Access Deny')
+  }
+}
+```  
+通过@UseGuards(AuthGuard('local')) 的方式绑定在登录的模块上。  然后在登录成功后颁布token 
+
+此时验证身份环节过去了。后续的判断需要使用jwt-strategy  
+>该validate()方法值得讨论。对于 jwt 策略，Passport 首先验证 JWT 的签名并解码 JSON。然后它调用我们的validate()方法，将解码后的 JSON 作为其单个参数传递。根据 JWT 签名的工作方式，我们可以保证我们收到的有效令牌是我们之前签名并颁发给有效用户的。  
+
+
  
 ### 日志 
 
@@ -205,7 +233,24 @@ export class MyLogger implements LoggerService {
 
  Nestjs 官网上默认配置的是TypeOrm、和MongoDB。。 T^T TypeOrm用过了，感觉不太好用，MongoDB 不会用..... 所以转向了 Sequelize 和 Mysql  
 
- **[Sequelize记录](src/models/models.md)**   
+ **[Sequelize记录](src/models/models.md)**     
+
+------ 
+哦吼，过了两天、我选择放弃使用了sequelize、转身投向了prisma.  
+用了一下，感觉不错。不管是本地同步数据库结构 
+```
+ npx prisma generate
+``` 
+还是 数据库同步本地模型  （不会生活成版本文件）  
+
+```
+ npx prisma db push 
+```
+
+或者是数据迁移  (不建议在生产环境使用该命令)
+```
+npx prisma migrate dev --name XXX(版本名称)
+```
 
  现在可以返回到Providers  
 

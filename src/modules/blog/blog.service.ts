@@ -34,4 +34,20 @@ export class BlogService {
       return error
     }
   }
+
+  async getBlogListPage(request: any) {
+    try {
+      const pageSize = 10;
+      const listPage = await prisma.blog.findMany({skip: (Number(request.pageNo) - 1) * pageSize, take: pageSize})
+      // TODO 返回的时间没有设置
+      return {
+        code: CodeMap.RequestSuccess,
+        msg: 'Get Page Successfully',
+        data: listPage
+      }
+    } catch (error) {
+      console.log(error)
+      return error
+    }
+  }
 }

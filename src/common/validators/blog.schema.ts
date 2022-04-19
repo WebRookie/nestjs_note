@@ -9,3 +9,12 @@ export const publishSchema = Joi.object({
   author: Joi.string().required(),
   label: Joi.string()
 })
+
+
+export const getAllBlogSchema = Joi.object({
+  param: Joi.object({
+    userId: Joi.string()
+  }),
+  // pageSize: Joi.number().required(),
+  pageNo: Joi.number().required(),
+})

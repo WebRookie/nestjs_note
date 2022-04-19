@@ -5,6 +5,7 @@ import { IToken } from "./login.interface";
 import { CodeMap } from "src/config/app.config";
 import { md5Code } from "src/utils/utils";
 import { PrismaClient } from "@prisma/client";
+import { jwtConstant } from 'src/common/auth/constants';
 const prisma = new PrismaClient()
 
 interface uniqueParams {
@@ -27,10 +28,14 @@ export class LoginService {
       console.log(uniqueP)
       const user = prisma.user.findFirst({
         where: {
-          email: uniqueP.username,
-          OR: {
-            userId: uniqueP.userId
-          }
+          OR: [
+            {
+              email: uniqueP.username,
+            },
+            {
+              userId: uniqueP.userId
+            }
+          ]
         }
       })
       return user
@@ -39,15 +44,19 @@ export class LoginService {
       return error
     }
   }
+
   async validate(username: string, password: string): Promise<any> {
     const user = await this.findUser({ username: username })
-    console.log(user)
     if (user?.password === password) {
       const { password, ...userInfo } = user
       return userInfo
     } else {
       return null
     }
+  }
+
+  async validateAuthData(payload: any): Promise<any> {
+    // console.log(payload)
   }
 
   /**
@@ -129,11 +138,12 @@ export class LoginService {
           data: null
         }
       }
-      const token = this.jwtService.sign(params.username, user.role)
+      // sign 内容体是payload，不能有敏感内容
+      const Access_Token = this.jwtService.sign({username:params.username, role:user.role},{secret:jwtConstant.secret})
       // const token = md5Code(params.username, params.password, params.timestamp)
-      this.setUserToken(token, Number(user.userId))
+      this.setUserToken(Access_Token, Number(user.userId))
       // 前端应该把返回的token放在后续的请求头里
-      user.token = token;
+      user.token = Access_Token;
       return {
         code: CodeMap.RequestSuccess,
         msg: 'Login Successfully',
