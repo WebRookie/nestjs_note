@@ -7,18 +7,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model blog {
+model Blog {
   blogId      Int       @id @default(autoincrement()) @map("blog_id")
-  userId      Int       @map("user_id")
   title       String    @db.VarChar(50)
   createdTime DateTime  @default(now()) @map("created_time") @db.Timestamp(6)
   updatedTime DateTime  @default(now()) @updatedAt @map("updatae_time") @db.Timestamp(6)
   deletedTime DateTime? @map("deleted_time")
   content     String    @db.VarChar(500)
-  author      String
+  user        User?      @relation(fields: [userId], references: [userId])
+  author      String    @db.VarChar(20)
+  userId      Int       @map("user_id")
+  comments    Comment[]
 }
 
-model user {
+model User {
   userId      Int      @id @unique @default(autoincrement()) @map("user_id")
   nickname    String   @db.VarChar(20)
   password    String
@@ -27,4 +29,16 @@ model user {
   token       String?
   createdTime DateTime @default(now()) @map("created_time") @db.Timestamp(6)
   updatedTime DateTime @updatedAt @map("updated_time")
+  blog        Blog[]
+}
+
+model Comment {
+  commentId   Int       @id @unique @default(autoincrement()) @map("comment_id")
+  userId      Int       @map("user_id")
+  blogId      Int       @map("blog_id")
+  comment     String    @db.VarChar(500)
+  createdTime DateTime  @default(now()) @map("created_time") @db.Timestamp(6)
+  deltedTime  DateTime? @map("deleted_time")
+  blog        Blog?     @relation(fields: [blogId], references: [blogId])
+  // blogBlogId  Int? // 关系标量字段(在上述 `@relation` 属性中使用)
 }

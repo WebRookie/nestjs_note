@@ -14,7 +14,7 @@ import { CodeMap } from "src/config/app.config";
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
-  constructor(private readonly logger: Logger){}
+  // constructor(private readonly logger: Logger){}
   catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
@@ -31,7 +31,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
       msg:  exception.message || 'Request Error' ,
       requestData: request.body
     })
-    this.logger.error({ message: [exception.message, exception.stack].join('\n')})
+    // this.logger.error({ message: [exception.message, exception.stack].join('\n')})
 
     // TODO 文件路径没有达到想要的位置但是输出还是实现了
     

@@ -24,3 +24,9 @@ export const updateBlogInfo = Joi.object({
   content: Joi.string().max(500).required(),
   label: Joi.string()
 })
+
+export const comment = Joi.object({
+  blogId: Joi.number().required(),
+  userId: Joi.number().required(),
+  comment: Joi.string().required()
+})

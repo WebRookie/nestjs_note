@@ -1,7 +1,14 @@
+import { comment } from './../../common/validators/blog.schema';
 import { BadRequestException, HttpException } from '@nestjs/common';
 import { LoginService } from 'src/modules/login/login.service';
 import prisma from 'src/common/globalEntity/prisma.client'
 import { CodeMap } from './../../config/app.config';
+
+interface IComments {
+  list: boolean
+}
+
+// comments : true  这里直接要求返回comments ts语法检测会提示错误，所以使用接口的形式来规范一下
 
 export class BlogService {
 
@@ -39,9 +46,13 @@ export class BlogService {
     try {
       const pageSize = 10;
       const listPage = await prisma.blog.findMany({
-        where: {
-          userId: request.userId && Number(request.userId)
-        }, skip: (Number(request.pageNo) - 1) * pageSize, take: pageSize
+        // where: {
+        //   userId: request.userId && Number(request.userId)
+        // },
+        include: {
+          comments: true,
+        },
+        skip: (Number(request.pageNo) - 1) * pageSize, take: pageSize,
       })
       // TODO 返回的时间没有设置
       return {
@@ -91,6 +102,48 @@ export class BlogService {
     } catch (error) {
       console.log(error)
       return error
+    }
+  }
+
+  async comment(request: any) {
+    try {
+      const { userId, blogId } = request
+      const user = await prisma.user.findFirst({
+        where: {
+          userId: userId
+        }
+      })
+      if (!user) {
+        return {
+          code: CodeMap.UserNotExist,
+          msg: 'User Don\'t Exist',
+          data: null
+        }
+      }
+      const blog = await prisma.blog.findFirst({
+        where: {
+          blogId: blogId
+        }
+      })
+      if (!blog) {
+        return {
+          code: CodeMap.RequestNotExist,
+          msg: 'Content Requested Do not Exist',
+          data: null
+        }
+      }
+
+      await prisma.comment.create({
+        data: request
+      })
+      return {
+        code: CodeMap.RequestSuccess,
+        msg: 'Comment Successfully',
+        data: null
+      }
+    } catch (error) {
+      console.log(error)
+      return new HttpException({ statusCode: 500, message: error }, 500)
     }
   }
 }

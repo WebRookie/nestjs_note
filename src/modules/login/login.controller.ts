@@ -12,6 +12,7 @@ export class LoginController {
   @Post('login')
   @UsePipes(new CommonValidationPipe(loginSchema))
   // @UseGuards(AuthGuard('local'))
+  @SkipAuth()
   @HttpCode(200)
   async login(@Body() req: object) {
     try {

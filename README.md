@@ -252,6 +252,16 @@ export class MyLogger implements LoggerService {
 npx prisma migrate dev --name XXX(版本名称)
 ```
 
+>在 Prisma schema 中，关系（relation）是两个模型间的 联系。例如，User 和 Post 间有一对多（1-n）的关系，因为一个用户可以有多篇博文。   
+
+其实我不太明白为什么需要进行表关联。而不是进行创建出一个关联表。？？有明白的大佬，讲述一下。 
+Go on    
+在 Prisma 层，User / Post 关系由以下部分组成：
+
+* 两个 关系字段：author 和 posts。关系字段在 Prisma 层定义模型间的联系，且 不存在于数据库中。这些字段用于生成 Prisma Client。
+* 标量 authorId 字段，被 @relation 属性引用。该字段 存在于数据库中 - 它是联系 Post 和 User 的外键。
+在 Prisma 层，两个模型间的联系 始终 由关系 两侧 的 关系字段 构成。
+
  现在可以返回到Providers  
 
 
