@@ -13,3 +13,6 @@ export const registSchema = Joi.object({
   email: Joi.string().email({tlds: { allow: ['com', 'net']}}).required()
 })
 
+export const getUserInfoSchema = Joi.object({
+  userId: Joi.number().required()
+})

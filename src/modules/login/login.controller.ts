@@ -1,7 +1,7 @@
 import { SkipAuth } from 'src/common/auth/constants';
 import { LoginService } from './login.service';
 import { Controller, Post, Body, UsePipes, UseGuards, HttpCode } from '@nestjs/common';
-import { loginSchema, registSchema } from 'src/common/validators/login.schema';
+import { loginSchema, registSchema, getUserInfoSchema } from 'src/common/validators/login.schema';
 import { CommonValidationPipe } from 'src/pipes/validation.pipe'
 import { CreateUserDto } from './login.dto';
 import { AuthGuard } from '@nestjs/passport';
@@ -28,6 +28,18 @@ export class LoginController {
   async regist(@Body() req: CreateUserDto) {
     try {
       return this.loginService.registUser(req)
+    } catch (error) {
+      console.log(error)
+      return error
+    }
+  }
+
+  @Post('getUserInfo')
+  @HttpCode(200)
+  @UsePipes(new CommonValidationPipe(getUserInfoSchema))
+  async getUserInfo( @Body() req: Object) {
+    try {
+      return this.loginService.getUserInfo(req)
     } catch (error) {
       console.log(error)
       return error

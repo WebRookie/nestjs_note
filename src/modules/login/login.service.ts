@@ -160,4 +160,18 @@ export class LoginService {
     }
   }
 
+  async getUserInfo(params: any) {
+    try {
+      const user = await this.findUser(params)
+      console.log(user)
+      return {
+        code: CodeMap.RequestSuccess,
+        msg: 'Get Info Successfully',
+        data: user
+      }
+    } catch (error) {
+      return new HttpException({ data: error}, 500)
+    }
+  }
+
 }
